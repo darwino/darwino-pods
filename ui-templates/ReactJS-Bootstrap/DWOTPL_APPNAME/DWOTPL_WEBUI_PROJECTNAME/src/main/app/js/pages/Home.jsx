@@ -17,7 +17,7 @@ export default class Home extends Component {
     render() {
         return (
           <div className="jumbotron">
-            <h2>Contacts Database</h2>
+            <h2>DWOTPL_APPDESCRIPTION</h2>
           </div>
         );
   }

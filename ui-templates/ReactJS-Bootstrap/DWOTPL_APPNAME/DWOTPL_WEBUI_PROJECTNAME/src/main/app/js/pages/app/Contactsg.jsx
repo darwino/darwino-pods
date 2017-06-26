@@ -37,24 +37,4 @@ const Contactsg = () => {
     )
 }
 
-/*dataLoader = {(num,pagesize) => {
-    return new Promise(function(resolve) {
-        setTimeout(() => {
-            let data = []
-            let loaded = num<15 ? pagesize : pagesize/2
-            for(let i=0; i<loaded; i++) {
-                let idx = num*pagesize+i
-                data.push({
-                    firstname: 'First'+idx,
-                    lastname: 'Last'+idx,
-                    adr: {state: 'State'+idx}
-                });
-            }
-            let eof = data.length<pagesize
-            let result = {data, eof}
-            resolve(result);
-        }, 500);
-    });
-}}*/
-
 export default Contactsg

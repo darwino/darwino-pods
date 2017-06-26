@@ -19,7 +19,7 @@ export default class Footer extends React.Component {
     return (
       <footer className="footer">
         <div className="container-fluid">
-          (c) 2017 Darwino Inc.
+          (c) 2017 DWOTPL_ORGANIZATION_NAME.
         </div>
       </footer>
     );

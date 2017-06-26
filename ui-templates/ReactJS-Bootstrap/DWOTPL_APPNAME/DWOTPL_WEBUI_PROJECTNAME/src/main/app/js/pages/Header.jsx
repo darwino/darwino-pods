@@ -24,7 +24,7 @@ export default class Header extends React.Component {
             <div className="navbar-header">
               <Link to="/" style={{color: 'inherit'}} className="navbar-brand">
                 <img src={HeaderLogo} className="hidden-sm hidden-xs" />
-                Welcome to the Contacts application
+                DWOTPL_APPLABEL
               </Link>
             </div>
           </div>
