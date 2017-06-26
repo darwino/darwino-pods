@@ -1,0 +1,15 @@
+{
+/* $$IF DWOTPL_TEMPLATE_DESIGN */    
+  "appGen": {
+    "generators": [
+      {
+        "mode": "erase",
+        "appName": "mainapp",
+        "generator": "ionic1-3pm",
+        "theme": "blue",
+        "targetDir": "src/main/resources/DARWINO-INF/resources/mobile"
+      }
+    ]
+  }
+/* $$ENDIF */
+}

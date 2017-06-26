@@ -1,0 +1,18 @@
+{	
+	"label": "Darwino Built-in",
+	"ui-templates": {
+		"angular-ionic-1": {
+			"label": "Angular Ionic 1",
+			"description": "Angular 1.x and Ionic 1",
+			"path": "ui-templates/Angular-Ionic-1"
+		},
+		"reactjs-bootstrap": {
+			"label": "ReactJS and Bootstrap",
+			"description": "ReactJS, Bootstrap and Webpack",
+			"path": "ui-templates/ReactJS-Bootstrap",
+			"properties": {
+				"DWOTPL_POM_PROFILE_WEBUI": "true"
+			}
+		}
+	}
+}
