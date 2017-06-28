@@ -109,10 +109,12 @@ export class DocumentForm extends Component {
 
         promise.then(() => {
             if(this.props.nextPageSuccess) {
+       			this.props.reset();
                 this.context.router.history.push(this.props.nextPageSuccess);
             }
         }, () => {
             if(this.props.nextPageError) {
+       			this.props.reset();
                 this.context.router.history.push(this.props.nextPageError);
             }
         });

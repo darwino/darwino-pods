@@ -17,7 +17,7 @@ import TableCursorList from "../../darwino/components/TableCursorList.jsx"
 const Contacts = () => {
     return (
         <TableCursorList
-            databaseId="contacts"
+            databaseId="DWOTPL_DATABASENAME"
             storeId="_default"
             params={{
                 orderby: "firstname,lastname"

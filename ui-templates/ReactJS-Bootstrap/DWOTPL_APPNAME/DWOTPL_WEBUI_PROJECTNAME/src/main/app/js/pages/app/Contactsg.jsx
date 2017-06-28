@@ -17,7 +17,7 @@ import CursorGrid from "../../darwino/components/CursorGrid.jsx"
 const Contactsg = () => {
     return (
         <CursorGrid
-            databaseId="contacts"
+            databaseId="DWOTPL_DATABASENAME"
             storeId="_default"
             params={{
                 orderby: "firstname,lastname"

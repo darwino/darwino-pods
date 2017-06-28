@@ -96,7 +96,7 @@ export default class JstoreCursor {
     lookup() {
         return this.fetchEntries().then(json => {
             return json.map(entry => {
-                return entry.value;
+                return entry.json;
             })
         })                
     }
@@ -107,7 +107,7 @@ export default class JstoreCursor {
             this.limit(pagesize)
             return this.fetchEntries().then(json => {
                 return json.map(entry => {
-                    return {...entry.value, __meta: entry};
+                    return {...entry.json, __meta: entry};
                 })
             })                
         }

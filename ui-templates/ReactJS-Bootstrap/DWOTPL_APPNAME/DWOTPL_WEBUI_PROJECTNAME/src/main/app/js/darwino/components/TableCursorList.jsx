@@ -55,7 +55,7 @@ export class TableCursorList extends BaseCursorList {
     getViewEntryCells(entry) {
         const { columns } = this.props;
         return columns.map(col =>
-            <td key={entry.unid+col.key}>{entry.value[col.key]}</td>
+            <td key={entry.unid+col.key}>{entry.json[col.key]}</td>
         );
     }
 
