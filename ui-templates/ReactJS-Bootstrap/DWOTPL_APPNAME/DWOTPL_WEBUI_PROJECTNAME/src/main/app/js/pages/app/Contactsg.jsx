@@ -21,7 +21,7 @@
  */
 
 import React from "react";
-import CursorGrid from "../../darwino/components/CursorGrid.jsx"
+import CursorGrid from "../../darwino-react-bootstrap/components/CursorGrid.jsx"
 
 const Contactsg = () => {
     return (

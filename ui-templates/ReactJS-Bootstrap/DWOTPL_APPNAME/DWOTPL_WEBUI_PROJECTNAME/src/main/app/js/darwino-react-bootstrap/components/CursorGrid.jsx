@@ -25,8 +25,8 @@ import { Link } from "react-router-dom";
 import PropTypes from 'prop-types';
 
 import ReactDataGrid from 'react-data-grid';
-import JstoreCursor from '../jstore/cursor';
-import PagingDataFetcher from '../util/PagingDataFetcher';
+import JstoreCursor from '../../darwino-react/jstore/cursor';
+import PagingDataFetcher from '../../darwino-react/util/PagingDataFetcher';
 
 
 /*

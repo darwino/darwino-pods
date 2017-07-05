@@ -1,5 +1,5 @@
 {
-  "name": "Darwino-Replicator",
+  "name": "DWOTPL_APPNAME",
   "private": true,
   "version": "0.0.1",
   "main": "webpack.config.js",

@@ -28,7 +28,7 @@ import { HashRouter as Router, Route } from "react-router-dom";
 
 import { Provider } from 'react-redux'
 import { reducer as reduxFormReducer } from 'redux-form';
-import { DarwinoQueryStoreReducer, DarwinoDocumentStoreReducer } from './darwino/reducers/jsonStoreReducer.jsx'
+import { DarwinoQueryStoreReducer, DarwinoDocumentStoreReducer } from './darwino-react/reducers/jsonStoreReducer.jsx'
 
 import promiseMiddleware from 'redux-promise';
 
@@ -54,7 +54,7 @@ import '../style/style.css';
 import Layout from "./pages/Layout.jsx";
 
 // App rendering
-import {DEV_OPTIONS,initDevOptions} from './darwino/util/dev.js';
+import {DEV_OPTIONS,initDevOptions} from './darwino-react/util/dev.js';
 
 // Development tools
 const DEVELOPMENT = true;

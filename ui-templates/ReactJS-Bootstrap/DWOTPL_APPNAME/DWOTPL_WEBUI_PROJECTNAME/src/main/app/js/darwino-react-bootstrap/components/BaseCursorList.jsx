@@ -23,8 +23,8 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { Link } from "react-router";
-import DEV_OPTIONS from '../util/dev';
-import JstoreCursor from '../jstore/cursor';
+import DEV_OPTIONS from '../../darwino-react/util/dev';
+import JstoreCursor from '../../darwino-react/jstore/cursor';
 
 const DEFAULT_PAGE_SIZE = 50;
 

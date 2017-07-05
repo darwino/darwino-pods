@@ -22,7 +22,7 @@
 
 import React from "react";
 
-import NavLink from "../darwino/components/NavLink.jsx";
+import NavLink from "../darwino-react-bootstrap/components/NavLink.jsx";
 
 export default class Nav extends React.Component {
     render() {

@@ -25,11 +25,11 @@ import { withRouter } from 'react-router'
 import { connect } from 'react-redux'
 import { Field, reduxForm, formValueSelector } from 'redux-form';
 import { Link, Prompt } from "react-router-dom";
-import { renderField, renderRadioGroup, renderCheckbox, renderSelect, renderRichText, renderDatePicker } from "../../darwino/form/formControls.jsx";
-import DocumentForm from "../../darwino/components/DocumentForm.jsx";
-import Section from "../../darwino/components/Section.jsx";
+import { renderField, renderRadioGroup, renderCheckbox, renderSelect, renderRichText, renderDatePicker } from "../../darwino-react-bootstrap/form/formControls.jsx";
+import DocumentForm from "../../darwino-react-bootstrap/components/DocumentForm.jsx";
+import Section from "../../darwino-react-bootstrap/components/Section.jsx";
 
-import JsonDebug from "../../darwino/util/JsonDebug.jsx";
+import JsonDebug from "../../darwino-react/util/JsonDebug.jsx";
 
 const FORM_NAME = "contact";
 const DATABASE = "DWOTPL_DATABASENAME";

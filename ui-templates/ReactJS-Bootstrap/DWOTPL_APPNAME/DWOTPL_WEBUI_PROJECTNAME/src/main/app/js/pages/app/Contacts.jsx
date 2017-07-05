@@ -21,7 +21,7 @@
  */
 
 import React from "react";
-import TableCursorList from "../../darwino/components/TableCursorList.jsx"
+import TableCursorList from "../../darwino-react-bootstrap/components/TableCursorList.jsx"
 
 const Contacts = () => {
     return (
