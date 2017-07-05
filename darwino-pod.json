@@ -4,7 +4,8 @@
 		"angular-ionic-1": {
 			"label": "Angular Ionic 1",
 			"description": "Angular 1.x and Ionic 1",
-			"path": "ui-templates/Angular-Ionic-1"
+			"path": "ui-templates/Angular-Ionic-1",
+			"design": true
 		},
 		"reactjs-bootstrap": {
 			"label": "ReactJS and Bootstrap",
