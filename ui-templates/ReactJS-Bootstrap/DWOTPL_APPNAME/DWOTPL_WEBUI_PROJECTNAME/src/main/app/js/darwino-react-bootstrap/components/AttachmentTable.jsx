@@ -24,7 +24,6 @@ import React, { Component } from "react";
 import { connect } from 'react-redux'
 import { Field, reduxForm, initialize, change } from 'redux-form';
 import { Link } from "react-router";
-import { FormControl, FormGroup, ControlLabel } from 'react-bootstrap';
 import { darwinoToStoreKey, updateDocument, createDocument, loadDocument, newDocument, deleteDocument, removeDocument } from "../../darwino-react/actions/jsonStoreActions.jsx";
 
 

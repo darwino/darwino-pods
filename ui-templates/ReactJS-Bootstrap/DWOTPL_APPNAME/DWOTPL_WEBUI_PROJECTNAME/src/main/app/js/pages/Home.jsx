@@ -20,7 +20,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { Component } from "react";
+import { Component } from "react";
 
 export default class Home extends Component {
     render() {

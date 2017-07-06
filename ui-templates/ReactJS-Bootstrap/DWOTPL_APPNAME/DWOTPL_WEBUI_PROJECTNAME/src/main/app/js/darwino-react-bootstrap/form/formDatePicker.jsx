@@ -21,7 +21,7 @@
  */
 
 import React from "react";
-import { FormControl, FormGroup, ControlLabel } from 'react-bootstrap';
+import { FormGroup, ControlLabel } from 'react-bootstrap';
 import DatePicker from 'react-bootstrap-date-picker';
 
 export const renderDatePicker = field => {

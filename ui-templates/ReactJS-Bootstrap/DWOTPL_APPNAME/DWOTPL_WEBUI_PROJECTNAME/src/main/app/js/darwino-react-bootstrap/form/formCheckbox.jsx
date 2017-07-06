@@ -21,7 +21,6 @@
  */
 
 import React from "react";
-import { FormControl, FormGroup, ControlLabel } from 'react-bootstrap';
 
 export const renderCheckbox = field => {
     return (
