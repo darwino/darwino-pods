@@ -82,6 +82,11 @@ export default class JstoreCursor {
         return this;
     }
 
+    name(name) {
+        this.params.name = this._stringify(name);
+        return this;
+    }
+    
     fetchEntries() {
         let url = `${DEV_OPTIONS.serverPrefix}$darwino-jstore/databases/${encodeURIComponent(this.database)}`
         if(this.store) {
@@ -110,15 +115,18 @@ export default class JstoreCursor {
         })                
     }
 
-    getDataLoader() {
+    getDataLoader(transform) {
         return (num,pagesize) => {
             this.skip(num*pagesize)
             this.limit(pagesize)
             return this.fetchEntries().then(json => {
-                return json.map(entry => {
-                    return {...entry.json, __meta: entry};
-                })
+                return transform ? json.map(transform) : json;
             })                
+            // return this.fetchEntries().then(json => {
+            //     return json.map(entry => {
+            //         return {...entry.json, __meta: entry};
+            //     })
+            // })                
         }
     }
 }

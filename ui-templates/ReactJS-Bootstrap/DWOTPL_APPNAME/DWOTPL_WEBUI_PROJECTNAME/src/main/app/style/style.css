@@ -1,10 +1,16 @@
 
 /* Layout */
-#body-container {
-	margin-top: 80px;
+
+html {
+  position: relative;
+  min-height: 100%;
 }
-.navbar-fixed-top .navbar-brand {
-	height: 80px;
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 50px;
+}
+#body-container {
+	margin-top: 50px;
 }
 .navbar-brand > img {
 	display: inline-block;
@@ -37,18 +43,4 @@ form button + a, form a + button {
 /* Footer */
 
 .footer {
-	position: absolute;
-	bottom: 0;
-	width: 100%;
-	/* Set the fixed height of the footer here */
-	height: 60px;
-	background-color: #f5f5f5;
-}
-html {
-  position: relative;
-  min-height: 100%;
-}
-body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
 }

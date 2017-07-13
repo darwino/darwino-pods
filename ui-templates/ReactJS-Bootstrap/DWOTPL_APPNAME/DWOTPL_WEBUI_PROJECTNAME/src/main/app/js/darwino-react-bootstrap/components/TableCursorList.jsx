@@ -43,18 +43,17 @@ export class TableCursorList extends BaseCursorList {
     }
 
     getViewEntries() {
-        const { entries } = this.state;
         const { columns } = this.props;
-
-        if(this.isFetching()) {
+        const { dataFetcher } = this;
+        if(dataFetcher.isFetching()) {
             return (<tr><td colSpan={columns.length}>Fetching...</td></tr>);
-        } if(this.getErrorMessage()) {
-            return (<tr><td colSpan={columns.length}><pre>Error: {this.getErrorMessage()}</pre></td></tr>);
-        } else if(Array.isArray(entries)) {
-            if(entries.length==0) {
+        } if(dataFetcher.isError()) {
+            return (<tr><td colSpan={columns.length}><pre>Error: {dataFetcher.getErrorMessage()||"Unknown - please look at the log"}</pre></td></tr>);
+        } else {
+            if(dataFetcher.getRowCount()==0) {
                 return (<tr><td colSpan={columns.length}>No entries found</td></tr>)
             } else {
-                return entries.slice(0, this.state.rowCount).map((entry, index) =>
+                return dataFetcher.getRows(0, dataFetcher.getRowCount()).map((entry, index) =>
                     <tr key={entry.unid} onClick={() => this.handleRowClick(entry)}>
                         {this.getViewEntryCells(entry)}
                     </tr>)
@@ -107,10 +106,12 @@ export class TableCursorList extends BaseCursorList {
             return null
         } else {
             return (
-                <button style={this.hasMoreRows() ? {} : {display: 'none'}} onClick={this.addRows}>{addRowsButtonText}</button>
+                <button style={this.dataFetcher.hasMoreRows() ? {} : {display: 'none'}} onClick={this.loadMoreRows}>{addRowsButtonText}</button>
             )
         }
     }
+
+
     
     render() {
         const { viewEntries, columns } = this.props;

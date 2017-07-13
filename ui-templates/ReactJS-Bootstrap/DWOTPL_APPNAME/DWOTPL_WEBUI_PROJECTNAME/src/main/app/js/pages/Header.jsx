@@ -26,15 +26,35 @@ import { Link } from 'react-router-dom';
 import HeaderLogo from "../../img/darwino-icon32.png";
 
 export default class Header extends React.Component {
+  onClick() {
+    alert("Clicked!");
+  }
   render() {
     return (
         <nav className="navbar navbar-default navbar-fixed-top" role="navigation">
           <div className="container-fluid">
             <div className="navbar-header">
+              <button type="button" className="navbar-toggle" data-toggle="collapse" data-target="#dwo-header-collapse">
+                <span className="sr-only">Toggle navigation</span>
+                <span className="icon-bar"></span>
+                <span className="icon-bar"></span>
+                <span className="icon-bar"></span>
+              </button>
+              <img src={HeaderLogo} className="navbar-brand hidden-xs" />
               <Link to="/" style={{color: 'inherit'}} className="navbar-brand">
-                <img src={HeaderLogo} className="hidden-sm hidden-xs" />
-                DWOTPL_APPLABEL
+                  DWOTPL_APPLABEL
               </Link>
+            </div>
+            <div className="collapse navbar-collapse" id="dwo-header-collapse">
+              <ul className="nav navbar-nav">
+                <li><a href="#" onClick={this.onClick}>Click me!</a></li>
+                <li className="dropdown">
+                  <a href="#" className="dropdown-toggle" data-toggle="dropdown">Dropdown<b className="caret"></b></a>
+                    <ul className="dropdown-menu">
+                      <li><a href="#" onClick={this.onClick}>Click me!</a></li>
+                  </ul>
+                </li>
+              </ul>
             </div>
           </div>
         </nav>

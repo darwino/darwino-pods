@@ -25,6 +25,9 @@ import PropTypes from 'prop-types';
 import { Link } from "react-router";
 import DEV_OPTIONS from '../../darwino-react/util/dev';
 import JstoreCursor from '../../darwino-react/jstore/cursor';
+import EmptyDataFetcher from '../../darwino-react/data/EmptyDataFetcher';
+import PagingDataFetcher from '../../darwino-react/data/PagingDataFetcher';
+import ArrayDataFetcher from '../../darwino-react/data/ArrayDataFetcher';
 
 const DEFAULT_PAGE_SIZE = 50;
 
@@ -51,103 +54,56 @@ export class BaseCursorList extends Component {
         this.handleRowClick = this.handleRowClick.bind(this);
         this.handleDeleteAllDocuments = this.handleDeleteAllDocuments.bind(this);
         this.getViewEntryCells = this.getViewEntryCells.bind(this);
-        this.hasMoreRows = this.hasMoreRows.bind(this);
-        this.addRows = this.addRows.bind(this);
+        this.loadMoreRows = this.loadMoreRows.bind(this);
+    }
 
-        this.state = {
-            page: 0,
-            pageSize: props.pageSize || DEFAULT_PAGE_SIZE,
-            moreRows: true,
-            fetching: false,
-            error: null,
-            entries: []
-        }
+    loadMoreRows() {
+        return this.dataFetcher.loadMoreRows();
     }
 
     componentWillMount() {
-        this.setPage(0)
+        let dataLoader = this.createDataLoader();
+        this.dataFetcher = this.createDataFetcher(dataLoader);
+        this.dataFetcher.init();
     }
-
-    clearEntries() {
-        this.setState({
-            page: 0,
-            moreRows: true,
-            fetching: false,
-            error: null,
-            entries: []
-        })
-    }
-
-    handleError(error) {
-        console.log("Error, "+error);
-        let msg = error.toString() // entries.toString()+"\n"+JSON.stringify(entries,null,2)
-        this.setState({
-            fetching: false,
-            error: msg
-        })
-    }
-
-    setPage(page) {
+    createDataLoader() {
         const { databaseId, storeId, params } = this.props;
-        (new JstoreCursor())
+        return (new JstoreCursor())
             .database(databaseId)
             .store(storeId)
             .queryParams(params)
-            .skip(page*this.state.pageSize)
-            .limit(this.state.pageSize)
-            .fetchEntries().then(entries => {
-                this.setState({
-                    page: page,
-                    fetching: false,
-                    moreRows: entries.length==this.state.pageSize,
-                    error: null,
-                    entries: entries
-                })
-            }, error => {
-                this.handleError(error)
-            }
-        );
-        this.setState({
-            fetching: true
+            .getDataLoader();
+    }
+    createDataFetcher(dataLoader) {
+        return this.createArrayDataFetcher(dataLoader);
+    }
+    createPagingDataFetcher(dataLoader) {
+        return new PagingDataFetcher({
+            dataLoader,
+            autoFetch: true,
+            onDataLoaded: () => {this.forceUpdate()},
+            ...this.props.dataFetcher
+        })
+    }
+    createArrayDataFetcher(dataLoader) {
+        return new ArrayDataFetcher({
+            dataLoader,
+            onDataLoaded: () => {this.forceUpdate()},
+            ...this.props.dataFetcher
         })
     }
 
-    addRows() {
-        if(!this.state.fetching && this.hasMoreRows()) {
-            const { databaseId, storeId, params } = this.props;
-            (new JstoreCursor())
-                .database(databaseId)
-                .store(storeId)
-                .queryParams(params)
-                .skip(this.state.page*this.state.pageSize+this.state.entries.length)
-                .limit(this.state.pageSize)
-                .fetchEntries().then(entries => {
-                    this.setState({
-                        fetching: false,
-                        moreRows: entries.length==this.state.pageSize,
-                        error: null,
-                        entries: this.state.entries.concat(entries)
-                    })
-                }, error => {
-                    handleError(error)
-                }
-            );
-            this.setState({
-                fetching: true
-            })
-        }
+    clearEntries() {
+        this.setPage(0);
     }
 
-    hasMoreRows() {
-        return this.state.moreRows;
+    setPage(page) {
+        this.dataFetcher.firstPage = page*this.props.pageSize;
+        this.dataFetcher.init();
     }
 
-    isFetching() {
-        return this.state.fetching;
-    }
-
-    getErrorMessage() {
-        return this.state.error;
+    getDataFetcher() {
+        return this.dataFetcher;
     }
 
     handleRowClick(entry) {

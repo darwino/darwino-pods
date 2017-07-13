@@ -36,6 +36,7 @@
     "react-bootstrap": "^0.31.0",
     "react-bootstrap-date-picker": "^5.0.1",
     "react-data-grid": "^2.0.48",
+    "react-data-grid-addons": "^2.0.52",
     "react-dom": "^15.5.4",
     "react-quill": "^1.0.0-rc.2",
     "react-redux": "^5.0.5",

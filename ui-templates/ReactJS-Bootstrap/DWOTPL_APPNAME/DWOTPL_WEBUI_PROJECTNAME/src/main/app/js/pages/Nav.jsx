@@ -32,14 +32,14 @@ export default class Nav extends React.Component {
             <nav className="navbar navbar-default navbar-fixed-side" role="navigation">
                 <div className="container">
                     <div className="navbar-header">
-                        <button type="button" data-target=".navbar-collapse" data-toggle="collapse" className="navbar-toggle">
+                        <button type="button" data-target="#dwo-nav-collapse" data-toggle="collapse" className="navbar-toggle">
                         <span className="sr-only">Toggle navigation</span>
                         <span className="icon-bar"></span>
                         <span className="icon-bar"></span>
                         <span className="icon-bar"></span>
                         </button>
                     </div>
-                    <div className="navbar-collapse collapse">
+                    <div className="navbar-collapse collapse" id="dwo-nav-collapse">
                         <ul className="nav navbar-nav">
                             <NavLink to="/">Home</NavLink>
 

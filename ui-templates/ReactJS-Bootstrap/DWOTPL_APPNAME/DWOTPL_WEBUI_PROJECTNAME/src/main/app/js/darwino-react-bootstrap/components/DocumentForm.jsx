@@ -80,6 +80,7 @@ export class DocumentForm extends Component {
 
         this.handleUpdateDocument = this.handleUpdateDocument.bind(this);
         this.handleDeleteDocument = this.handleDeleteDocument.bind(this);
+        this.handleCancel = this.handleCancel.bind(this);
     }
     
     componentWillMount() {
@@ -144,6 +145,13 @@ export class DocumentForm extends Component {
                 this.context.router.history.push(this.props.nextPageError);
             }
         });
+    }
+
+    handleCancel(state, dispatch) {
+        if(this.props.nextPageSuccess) {
+            this.props.reset()
+            this.context.router.history.push(this.props.nextPageSuccess);
+        } 
     }
 }
 

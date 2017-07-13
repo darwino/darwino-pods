@@ -20,31 +20,16 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import Constants from "./Constants.jsx";
-import CursorGrid from "../../darwino-react-bootstrap/components/CursorGrid.jsx"
-
-const Contactsg = () => {
-    return (
-        <CursorGrid
-            databaseId={Constants.DATABASE}
-            storeId="_default"
-            params={{
-                orderby: "firstname,lastname"
-            }}
-            grid={{
-                columns:[
-                    {name: "FirstName", key: "firstname"},
-                    {name: "LastName", key: "lastname"},
-                    {name: "State", key: "state"}
-                ],
-                enableCellSelect: true
-            }}
-            baseRoute="/app/contact"
-            createButtonText="Create a new contact"
-            deleteAllButtonText="Delete all contacts"
-        />
-    )
+export default class EmptyDataFetcher {
+    constructor(props) {
+        Object.assign(this,props)
+    }
+    init() {
+    }
+    getRow(i) {
+        return null
+    }
+    getRowCount() {
+        return 0
+    }
 }
-
-export default Contactsg

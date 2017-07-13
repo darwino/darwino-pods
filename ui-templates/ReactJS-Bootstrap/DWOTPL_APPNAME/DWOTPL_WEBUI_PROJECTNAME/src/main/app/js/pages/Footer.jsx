@@ -26,10 +26,8 @@ import React from "react";
 export default class Footer extends React.Component {
   render() {
     return (
-      <footer className="footer">
-        <div className="container-fluid">
-          (c) 2017 DWOTPL_ORGANIZATION_NAME.
-        </div>
+      <footer className="navbar navbar-default navbar-fixed-bottom footer">
+        <p className="navbar-text">(c) 2017 DWOTPL_ORGANIZATION_NAME.</p>
       </footer>
     );
   }
