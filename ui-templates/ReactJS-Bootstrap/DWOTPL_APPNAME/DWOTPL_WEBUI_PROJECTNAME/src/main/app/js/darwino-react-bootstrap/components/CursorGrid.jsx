@@ -1,25 +1,6 @@
-/*!COPYRIGHT HEADER! 
- *
+/* 
  * (c) Copyright Darwino Inc. 2014-2017.
- *
- * Licensed under The MIT License (https://opensource.org/licenses/MIT)
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software 
- * and associated documentation files (the "Software"), to deal in the Software without restriction, 
- * including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
- * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, 
- * subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all copies or substantial 
- * portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT 
- * LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
- * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
- * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from 'prop-types';
@@ -27,8 +8,9 @@ import PropTypes from 'prop-types';
 import ReactDataGrid from 'react-data-grid';
 // Is there a better syntax for this?
 //import {Data:{Selectors} as Selectors}  from 'react-data-grid-addons';
-import {Data}  from 'react-data-grid-addons';
-const Selectors = Data.Selectors;
+//import {Data}  from 'react-data-grid-addons';
+//const Selectors = Data.Selectors;
+import Selectors  from '../../darwino-react-bootstrap/components/react-grid/Selectors';
 import JstoreCursor from '../../darwino-react/jstore/cursor';
 import EmptyDataFetcher from '../../darwino-react/data/EmptyDataFetcher';
 import ArrayDataFetcher from '../../darwino-react/data/ArrayDataFetcher';
@@ -49,13 +31,13 @@ const  DefaultRowGroupRenderer = (props) => {
 
     let onKeyDown = (e) => {
         if (e.key === 'ArrowLeft') {
-            props.onRowExpandToggle(false);
+            props.handleRowExpandToggle(false);
         }
         if (e.key === 'ArrowRight') {
-            props.onRowExpandToggle(true);
+            props.handleRowExpandToggle(true);
         }
         if (e.key === 'Enter') {
-            props.onRowExpandToggle(!props.isExpanded);
+            props.handleRowExpandToggle(!props.isExpanded);
         }
     };
 
@@ -74,23 +56,48 @@ export class CursorGrid extends Component {
         router: PropTypes.object
     };
 
-    selector = false
+    selector = false // React grid add-on Selector
+
+    // Cursor property
+    orderBy = null
+    descending = false
+    ftSearch = null
+
     constructor(props) {
         super(props);
         this.handleRowClick = this.handleRowClick.bind(this);
-        this.onRowExpandToggle = this.onRowExpandToggle.bind(this);
+        this.handleGridSort = this.handleGridSort.bind(this);
+        this.handleRowExpandToggle = this.handleRowExpandToggle.bind(this);
         this.rowGetter = this.rowGetter.bind(this);
+        this.getSubRowDetails = this.getSubRowDetails.bind(this);
+        this.onCellExpand = this.onCellExpand.bind(this);
+        this.state = {}
         if(props.groupBy) {
-            this.state = {
-                groupBy: props.groupBy,
-                expandedRows: {}
-            }
+            this.state.groupBy= props.groupBy;
+            this.state.expandedRows= {};
+        }
+        if(props.showResponses) {
+            this.state.expanded = {}
         }
     }
 
+    findColumn(key) {
+        const columns = this.props.grid && this.props.grid.columns;
+        if(columns) {
+            for(let i=0; i<columns.length; i++) {
+                if(columns[i].key==key) return columns[i]
+            }
+        }
+        return null;
+    }
+
     componentWillMount() {
+        this.reinitData();
+    }
+
+    reinitData() {
         let dataLoader = this.createDataLoader();
-        if(this.props.groupBy) {
+        if(this.props.groupBy || this.props.showResponses) {
             this.selector = true
             this.dataFetcher = this.createArrayDataFetcher(dataLoader);
         } else {
@@ -100,15 +107,30 @@ export class CursorGrid extends Component {
     }
     createDataLoader() {
         const { databaseId, storeId, params } = this.props;
-        return (new JstoreCursor())
+        let jsc = new JstoreCursor()
             .database(databaseId)
             .store(storeId)
             .queryParams(params)
-            .getDataLoader(entry => {
-                return {...entry.json, __meta: entry};
-            }            
-        );
+        ;
+        if(this.orderBy) {
+            jsc.orderby(this.orderBy,this.descending)
+        }
+        if(this.ftSearch) {
+            jsc.ftsearch(this.ftSearch)
+        }
+        return jsc.getDataLoader(entry => {
+            // Do it recusively for the chidren if any
+            function process(e) {
+                var r = {...e.json, __meta: e};
+                if(r.__meta && r.__meta.children) {
+                    r.__meta.children = r.__meta.children.map(process);
+                }
+                return r;
+            }
+            return process(entry);
+        });            
     }
+
     createPagingDataFetcher(dataLoader) {
         return new PagingDataFetcher({
             dataLoader,
@@ -127,22 +149,38 @@ export class CursorGrid extends Component {
 
 
     handleRowClick(entry) {
-        const { baseRoute } = this.props;
-        if(!baseRoute || !entry) {
+        const { baseRoute, dynamicRoute } = this.props;
+        if((!baseRoute && !dynamicRoute) || !entry || !entry.__meta) {
             return;
         }
         if(entry.__meta.category) {
             return;
-        }
+        }        
+        let url = dynamicRoute ? dynamicRoute(entry) : baseRoute + '/' + entry.__meta.unid;  
         // https://stackoverflow.com/questions/42701129/how-to-push-to-history-in-react-router-v4
-        this.context.router.history.push(baseRoute + '/' + entry.__meta.unid);
+        if(url) this.context.router.history.push(url);
     }
 
-    onRowExpandToggle({ columnGroupName, name, shouldExpand }) {
+    handleRowExpandToggle({ columnGroupName, name, shouldExpand }) {
         let expandedRows = Object.assign({}, this.state.expandedRows);
         expandedRows[columnGroupName] = Object.assign({}, expandedRows[columnGroupName]);
         expandedRows[columnGroupName][name] = {isExpanded: shouldExpand};
         this.setState({expandedRows: expandedRows});
+    }
+
+    handleGridSort(sortColumn, sortDirection) {
+        let c = this.findColumn(sortColumn);
+        if(c && sortDirection!="NONE") {
+            this.orderBy = c.sortField||sortColumn
+            this.descending = sortDirection=='DESC'
+        } else {
+            this.orderBy = null
+        }
+        this.reinitData();
+    }
+
+    onSearchChange(evt) {
+        this.setState({_ftSearch: evt.target.value});
     }
 
     createActionBar() {
@@ -151,6 +189,23 @@ export class CursorGrid extends Component {
                 {this.getCreateButton()}
                 {this.getDeleteAllButton()}
             </div>
+        );
+    }
+
+    createFTSearchBar() {
+        return (
+            <form className="navbar-form" role="search" style={{padding: 0}}
+                    onSubmit={(evt) => {evt.preventDefault(); this.ftSearch=this._ftSearch; this.reinitData();}}>
+                <div className="input-group">
+                    <input type="text" className="form-control" size="30" placeholder="Search..." name="q" 
+                        onChange={(evt) => this._ftSearch=evt.target.value}/>
+                    <div className="input-group-btn">
+                        <button className="btn btn-default" type="submit">
+                            <i className="glyphicon glyphicon-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>        
         );
     }
 
@@ -182,7 +237,7 @@ export class CursorGrid extends Component {
         if(this.selector) {
             return Selectors.getRows(this.state)[i];
         }
-        return this.dataFetcher.getRow(i);
+        return i>=0 ? this.dataFetcher.getRow(i) : null;
     }
     rowsCount() {
         if(this.selector) {
@@ -192,10 +247,53 @@ export class CursorGrid extends Component {
         return this.dataFetcher.getRowCount();
     }
 
+    getSubRowDetails(rowItem) {
+        //alert("getSubRowDetails="+JSON.stringify(rowItem))
+        let rowId = rowItem.__meta.unid
+        let isExpanded = this.state.expanded[rowId] ? this.state.expanded[rowId] : false;
+        return {
+            group: rowItem.__meta.children && rowItem.__meta.children.length > 0,
+            expanded: isExpanded,
+            children: rowItem.__meta.children,
+            field: this.props.grid.columns[0].key,
+            treeDepth: rowItem.treeDepth || 0,
+            siblingIndex: rowItem.siblingIndex,
+            numberSiblings: rowItem.numberSiblings
+        };
+    }
+    onCellExpand(args) {
+        let rows = this.state.rows.slice(0);
+        let rowKey = args.rowData.__meta.unid;
+        let rowIndex = rows.indexOf(args.rowData);
+        let subRows = args.expandArgs.children;
+
+        let expanded = Object.assign({}, this.state.expanded);
+        if (expanded && !expanded[rowKey]) {
+            expanded[rowKey] = true;
+            this.updateSubRowDetails(subRows, args.rowData.treeDepth);
+            rows.splice(rowIndex + 1, 0, ...subRows);
+        } else if (expanded[rowKey]) {
+            expanded[rowKey] = false;
+            rows.splice(rowIndex + 1, subRows.length);
+        }
+
+        this.setState({ expanded: expanded, rows: rows });
+    }
+    updateSubRowDetails(subRows, parentTreeDepth) {
+        let treeDepth = parentTreeDepth || 0;
+        subRows.forEach((sr, i) => {
+            sr.treeDepth = treeDepth + 1;
+            sr.siblingIndex = i;
+            sr.numberSiblings = subRows.length;
+        });
+    }
+
     render() {
+        const props = this.props;
         return  (
             <div>
                 {this.createActionBar()}
+                {props.ftSearch && this.createFTSearchBar()}
                 <ReactDataGrid
                     rowGetter={this.rowGetter}
                     rowsCount={this.rowsCount()}
@@ -203,8 +301,15 @@ export class CursorGrid extends Component {
                     onRowClick={(idx,data) => {
                         this.handleRowClick(data)
                     }}
-                    onRowExpandToggle={this.onRowExpandToggle}
+                    onRowExpandToggle={this.handleRowExpandToggle}
                     rowGroupRenderer={DefaultRowGroupRenderer}
+                    onGridSort={this.handleGridSort}
+                    { ...(props.showResponses && 
+                        {
+                            getSubRowDetails: this.getSubRowDetails,
+                            onCellExpand: this.onCellExpand
+                        }
+                    )}
                     {...this.props.grid}                
                 />
             </div>

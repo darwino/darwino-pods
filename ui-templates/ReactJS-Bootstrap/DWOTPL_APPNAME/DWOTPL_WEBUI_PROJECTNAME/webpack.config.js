@@ -22,13 +22,13 @@ const nodeModulesDir  = path.resolve(__dirname, 'node_modules');
 
 const debug = process.env.NODE_ENV !== "production";
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+//const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
-module.exports = {
+// Ugly way to find if we are in prod
+const production = (process.argv.indexOf('-p')>=0) || (process.env.NODE_ENV==='production');
+
+const config = {
 	context: contextDir,
-	devtool: debug ? "inline-sourcemap" : null,
-	devServer: {
-		port: 8008
-	},	
 	entry: [
 		"babel-polyfill",
 		path.resolve(contextDir, "js/client.jsx")
@@ -45,7 +45,23 @@ module.exports = {
 				exclude: [nodeModulesDir],
 				query: {
 					presets: ['react', 'es2015', 'stage-1'],
-					plugins: ['transform-class-properties']
+					plugins: [
+						'transform-class-properties',
+			            ["transform-imports", {
+			                "redux-form": {
+			                  "transform": "redux-form/es/${member}",
+			                  "preventFullImport": true
+			                },
+			                "lodash": {
+			                    "transform": "lodash/${member}",
+			                    "preventFullImport": true
+			                },
+			                "react-bootstrap": {
+				                  "transform": "react-bootstrap/lib/${member}",
+				                  "preventFullImport": true
+				                }
+				            }]					
+					]
 				}
 			}, {
 				test: /\.scss$/,
@@ -63,13 +79,42 @@ module.exports = {
 		]
 	},
 	plugins : [
+		//new BundleAnalyzerPlugin(),
 		new HtmlWebpackPlugin({
 			template: "html/index.html"
-		}),
-	    new webpack.ProvidePlugin({   
-	        jQuery: 'jquery',
-	        $: 'jquery',
-	        jquery: 'jquery'
 	    })
 	],
 };
+
+if (production) {
+	new webpack.DefinePlugin({ // <-- key to reducing React's size
+       'process.env': {
+         'NODE_ENV': JSON.stringify('production')
+       }
+    }),
+    new webpack.optimize.DedupePlugin(), //dedupe similar code 
+    new webpack.optimize.UglifyJsPlugin(), //minify everything
+    new webpack.optimize.AggressiveMergingPlugin()//Merge chunks 	
+	
+	
+    // Plugins for production
+    // https://stackoverflow.com/questions/35054082/webpack-how-to-build-production-code-and-how-to-use-it
+/*	
+    config.plugins.push(new webpack.optimize.CommonsChunkPlugin('common.js'))
+    config.plugins.push(new webpack.optimize.OccurrenceOrderPlugin())
+*/
+    //babelSettings.plugins.push("transform-react-inline-elements");
+    //babelSettings.plugins.push("transform-react-constant-elements");
+
+} else {
+    //config.devtool = "#cheap-module-source-map"
+	config.devtool= "source-map"
+    config.devServer = {
+		port: 8008
+    }
+    config.plugins.push(
+        new webpack.HotModuleReplacementPlugin()
+    );
+}
+
+module.exports = config
