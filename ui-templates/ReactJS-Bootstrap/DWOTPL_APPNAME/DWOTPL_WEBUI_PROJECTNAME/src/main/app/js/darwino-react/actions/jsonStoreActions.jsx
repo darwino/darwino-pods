@@ -53,10 +53,13 @@ export const removeDocument = (database, store, unid) => ({
 function dispatchNew(doc,docEvents) {
     if(docEvents) {
         if(docEvents.initialize) {
-            docEvents.initialize(doc.json)
+            docEvents.initialize(doc,true)
         }
         if(docEvents.prepareForDisplay) {
             docEvents.prepareForDisplay(doc.json)
+        }
+        if(docEvents.documentReady) {
+            docEvents.documentReady(doc)
         }
     }
     return doc;
@@ -79,8 +82,16 @@ export const newDocument = (database, store, unid, serverInit, docEvents) => ({
 
 // Document Load
 function dispatchLoad(doc,docEvents) {
-    if(docEvents && docEvents.prepareForDisplay) {
-         docEvents.prepareForDisplay(doc.json)
+    if(docEvents) {
+        if(docEvents.initialize) {
+            docEvents.initialize(doc,false)
+        }
+        if(docEvents.prepareForDisplay) {
+            docEvents.prepareForDisplay(doc.json)
+        }
+        if(docEvents.documentReady) {
+            docEvents.documentReady(doc)
+        }
     }
     return doc;
 }

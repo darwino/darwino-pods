@@ -8,13 +8,13 @@ import { Route, Switch } from 'react-router-dom';
 
 import Header from "./Header.jsx";
 import Footer from "./Footer.jsx";
-import Nav from "./Nav.jsx";
+import Navigator from "./Navigator.jsx";
+import AdminConsole from "../darwino-react-bootstrap/components/AdminConsole.jsx";
 
 import Home from "./Home.jsx";
 
-import AppContact from "./app/Contact.jsx";
-import AppContacts from "./app/Contacts.jsx";
-import AppContactsg from "./app/Contactsg.jsx";
+import SampleForm from "./app/SampleForm.jsx";
+import SampleView from "./app/SampleView.jsx";
 
 export default class Layout extends React.Component {
   render() {
@@ -25,16 +25,17 @@ export default class Layout extends React.Component {
         <div className="container-fluid" id="body-container">
           <div className="row">
             <div className="col-sm-3 col-lg-2 sidebar">
-              <Nav location={location} />
+              <Navigator location={location} />
             </div>
             <div className="col-sm-9 col-lg-10 main" id="content">
               <Switch>
                 <Route exact path="/" component={Home}></Route>
 
-                <Route exact path="/app/contacts" component={AppContacts}></Route>
-                <Route exact path="/app/contactsg" component={AppContactsg}></Route>
-                <Route exact path="/app/contact/" component={AppContact}></Route>
-                <Route exact path="/app/contact/:unid" component={AppContact}></Route>
+                <Route exact path="/app/docs" component={SampleView}></Route>
+                <Route exact path="/app/doc/" component={SampleForm}></Route>
+                <Route exact path="/app/doc/:unid" component={SampleForm}></Route>
+
+                <Route exact path="/admin/console" component={AdminConsole}></Route>
               </Switch>
             </div>
           </div>

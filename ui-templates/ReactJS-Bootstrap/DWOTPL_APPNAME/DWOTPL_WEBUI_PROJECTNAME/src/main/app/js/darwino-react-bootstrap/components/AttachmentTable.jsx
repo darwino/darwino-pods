@@ -2,6 +2,7 @@
  * (c) Copyright Darwino Inc. 2014-2017.
  */
 import React, { Component } from "react";
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux'
 import { Field } from 'redux-form';
 import { Link } from "react-router";
@@ -13,12 +14,21 @@ import { renderAttachmentUrl, cleanAttachmentName } from "../../darwino-react/js
  */
 export class AttachmentTable extends Component {
 
-    constructor(props) {
-        super(props);
-    }
+    // Context to read from the parent - router
+    static contextTypes = {
+        documentForm: PropTypes.object
+    };
+    
+    constructor(props,context) {
+        super(props,context);
+        if(!context.documentForm) {
+            throw new Error('AttachmentTable must be inside a component within a DocumentForm');        
+        }
+}
 
     render() {
-        const {doc,field} = this.props;
+        const {field} = this.props;
+        const doc = this.context.documentForm.getDocument();
         if(!doc || !doc.attachments) {
             return null;
         }

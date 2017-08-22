@@ -25,7 +25,7 @@ export class NavGroup extends Component {
         const {title,collapsible} = this.props
         if(collapsible) {
             return (
-                <li className="dropdown">
+                <li className="dropdown open">
                     <a className="dropdown-toggle" onClick={this.handleClick}>
                         <i className={"glyphicon "+(this.state.expanded ? "glyphicon-chevron-down" : "glyphicon-chevron-right")}></i>
                         &nbsp;
@@ -40,7 +40,7 @@ export class NavGroup extends Component {
             )
         } else {
             return (
-                <li className="dropdown">
+                <li className="dropdown open">
                     <ul className="dropdown-menu">
                         {this.props.children}
                     </ul>

@@ -6,27 +6,30 @@ import React from "react";
 import Constants from "./Constants.jsx";
 import CursorGrid from "../../darwino-react-bootstrap/components/CursorGrid.jsx"
 
-const Contactsg = () => {
+const SampleView = () => {
     return (
         <CursorGrid
             databaseId={Constants.DATABASE}
             storeId={'_default'}
             params={{
-                orderby: "firstname,lastname"
+                extract: {
+                    _unid: "_unid",
+                    myfield: "myfield",
+                },
+                orderby: "_cdate d"
             }}
             grid={{
                 columns:[
-                    {name: "FirstName", key: "firstname"},
-                    {name: "LastName", key: "lastname"},
-                    {name: "State", key: "state"}
+                    {name: "UNID", key: "_unid"},
+                    {name: "My Field", key: "myfield"}
                 ],
                 enableCellSelect: true
             }}
-            baseRoute="/app/contact"
-            createButtonText="Create a new contact"
-            deleteAllButtonText="Delete all contacts"
+            baseRoute="/app/doc"
+            createButtonText="Create a new document"
+            deleteAllButtonText="Delete all documents"
         />
     )
 }
 
-export default Contactsg
+export default SampleView

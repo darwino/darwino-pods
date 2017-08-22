@@ -33,13 +33,24 @@ export const renderRichText = field => {
             </FormGroup>
         )
     } else {
+        // React-quill issue that sets the form dirty when the value is set
+        // See: https://github.com/zenoamaro/react-quill/issues/259
+        function onChange(content,delta,source,editor) { 
+            if(source!=="api") {
+                input.onChange(content)
+            }
+        }
+        // This generates an issue where the content gets empty when there is a click on a combobox within the toolbar */}                    
+        // We only pass 'value' & 'onchange'                     
+        //    onBlur={input.onBlur}
         return (
             <FormGroup className={meta.touched && meta.error ? 'has-error' : ''}>
                 {label && <ControlLabel>{label}</ControlLabel>}
-                <ReactQuill 
+                <ReactQuill
                     theme='snow'
                     readOnly={disabled}
-                    {...input} 
+                    onChange={onChange}
+                    value={input.value}
                     modules={_quillModules}>
                 </ReactQuill>
                 {meta.touched && meta.error && <div className="error">{meta.error}</div>}
@@ -47,3 +58,4 @@ export const renderRichText = field => {
         )
     }
 }
+

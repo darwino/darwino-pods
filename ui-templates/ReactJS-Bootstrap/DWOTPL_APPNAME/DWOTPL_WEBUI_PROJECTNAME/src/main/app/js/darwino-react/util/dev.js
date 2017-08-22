@@ -15,8 +15,8 @@ const DEV_OPTIONS = {
 }
 export default DEV_OPTIONS;
 
-export function initDevOptions(DEVELOPMENT,dwoUrl) {
-    DEV_OPTIONS.DEVELOPMENT=DEVELOPMENT;
+export function initDevOptions(dwoUrl) {
+    DEV_OPTIONS.DEVELOPMENT=true;
     let devpack = window.location.port==8008
     if(devpack) {
         DEV_OPTIONS.WEBPACK = true;

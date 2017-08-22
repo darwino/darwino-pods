@@ -34,13 +34,13 @@ import Layout from "./pages/Layout.jsx";
 // App rendering
 import {DEV_OPTIONS,initDevOptions} from './darwino-react/util/dev.js';
 
-// Development tools
-const DEVELOPMENT = true;
-
 // Redux dev tools
-const composeEnhancers = DEVELOPMENT ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose : compose;
-if(DEVELOPMENT) {
-    initDevOptions(DEVELOPMENT,"http://localhost:8080/DWOTPL_J2EE_PATHINFO/")
+let composeEnhancers;
+if(process.env.NODE_ENV!="production") {
+    composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+    initDevOptions("http://localhost:8080/contacts-react/")
+} else {
+    composeEnhancers = compose;
 }
 
 // Establish the store
