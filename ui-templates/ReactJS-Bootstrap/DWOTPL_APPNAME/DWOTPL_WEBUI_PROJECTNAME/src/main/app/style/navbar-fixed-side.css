@@ -1,4 +1,6 @@
 /* Make to NavBar not scrolling with the page */
+/* http://www.samrayner.com/bootstrap-side-navbar/ */
+
 @media (max-width: 768px) {
 	.navbar-fixed-side {
 		margin-left: -15px;

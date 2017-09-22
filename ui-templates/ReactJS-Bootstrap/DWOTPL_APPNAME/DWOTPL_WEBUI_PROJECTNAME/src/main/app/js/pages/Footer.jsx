@@ -8,7 +8,7 @@ import React from "react";
 export default class Footer extends React.Component {
   render() {
     return (
-      <footer className="navbar navbar-default navbar-fixed-bottom footer">
+      <footer id="footer" className={"navbar navbar-default navbar-fixed-bottom footer"+(this.props.inverse ? " navbar-inverse" : "")}>
         <p className="navbar-text">(c) 2017 DWOTPL_ORGANIZATION_NAME.</p>
       </footer>
     );

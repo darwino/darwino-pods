@@ -7,14 +7,13 @@ import { withRouter } from 'react-router'
 import { connect } from 'react-redux'
 import { Field, reduxForm } from 'redux-form';
 import { Link, Prompt } from "react-router-dom";
-import { renderField, renderRadioGroup, renderCheckbox, renderSelect, renderRichText, renderDatePicker } from "../../darwino-react-bootstrap/form/formControls.jsx";
-import DocumentForm from "../../darwino-react-bootstrap/components/DocumentForm.jsx";
-import ComputedField from "../../darwino-react-bootstrap/components/ComputedField.jsx";
 import { Button } from 'react-bootstrap';
 
-import Constants from "./Constants.jsx";
+import {JsonDebug} from "@darwino/darwino-react";
+import { DocumentForm, ComputedField,
+         renderField, renderRadioGroup, renderCheckbox, renderSelect, renderRichText, renderDatePicker } from '@darwino/darwino-react-bootstrap';
 
-import JsonDebug from "../../darwino-react/util/JsonDebug.jsx";
+import Constants from "./Constants";
 
 const DATABASE = Constants.DATABASE;
 const STORE = "_default";
@@ -26,8 +25,7 @@ export class SampleForm extends DocumentForm {
     // Default values of the properties
     static defaultProps  = {
         databaseId: DATABASE,
-        storeId: STORE,
-        nextPageSuccess: "/app/docs"
+        storeId: STORE
     };
 
     constructor(props) {
@@ -35,23 +33,46 @@ export class SampleForm extends DocumentForm {
     }
 
     handleActionClick() {
-        this.setFieldValue("myfield","");
+        alert("You clicked me!");
     }
 
     createActionBar() {
         return (
             <div className="action-bar">
-                <Button onClick={() => {this.handleActionClick()}}>Clear Data!</Button>
+                <Button onClick={() => {this.handleActionClick()}}>Action Button</Button>
             </div>
         );
     }
 
+    // Transform the generic attachment links to physical ones
+    prepareForDisplay(values) {
+        //if(values.richText) values.richText = richTextToDisplayFormat(this.state,values.richText)
+    }
+
+    // Transform the physical attachment links back to generic ones
+    prepareForSave(values) {
+        //if(values.richText) values.richText = richTextToStorageFormat(this.state,values.richText)
+    }
+
+    // Default values when a new document is created
+    defaultValues(values) {
+        //values.form = "MyForm"
+    }
+
+    // Values computed once when the document is loaded
+    calculateOnLoad(values) {
+        //values.title = "My Document"
+    }
+
+    // Values computed every time the document is changed
+    calculateOnChange(values) {
+        //values.fullnameUpper = this.getFieldValue("fullname","").toUpperCase()
+    }
+
+    // Validation
     validate(values) {
         const errors = {};
         // Add the validation rules here!
-        if(!values.myfield) {
-            errors.myfield = "Missing MyField value"
-        }
         return errors;
     }    
 
@@ -92,7 +113,7 @@ export class SampleForm extends DocumentForm {
                         </div>
                         
                         {/*Uncomment to display the current JSON content*/}
-                        {/*<JsonDebug form={this.props.form}/>*/}
+                        <JsonDebug form={this.props.form}/>
                     </fieldset>
                 </form>
             </div>

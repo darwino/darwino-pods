@@ -37,6 +37,9 @@ const config = {
 		path: assetsDir,
 		filename: "bundle.js"
 	},
+  	resolve: {
+    	extensions: ['.js', '.jsx']
+	},
 	module: {
 		loaders: [
 			{

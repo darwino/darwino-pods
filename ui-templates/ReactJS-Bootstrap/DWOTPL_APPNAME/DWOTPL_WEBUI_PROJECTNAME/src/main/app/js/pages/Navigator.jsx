@@ -5,13 +5,12 @@
 import React from "react";
 import { Navbar, Nav } from 'react-bootstrap';
 
-import NavLink from "../darwino-react-bootstrap/components/NavLink.jsx";
-import NavGroup from "../darwino-react-bootstrap/components/NavGroup.jsx";
+import {NavLink, NavGroup} from '@darwino/darwino-react-bootstrap';
 
 export default class Navigator extends React.Component {
     render() {
         return (
-            <Navbar collapseOnSelect className="navbar-fixed-side">
+            <Navbar inverse={this.props.inverse} collapseOnSelect className="navbar-fixed-side">
                 <Navbar.Header>
                     <Navbar.Toggle />
                 </Navbar.Header>
