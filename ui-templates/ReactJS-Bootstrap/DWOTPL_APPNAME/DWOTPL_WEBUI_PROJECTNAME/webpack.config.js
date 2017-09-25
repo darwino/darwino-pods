@@ -76,11 +76,18 @@ const config = {
 				test: /\.json$/,
 				loader: 'json-loader'
 			}, {
-				test: /\.(eot|woff|woff2|ttf|svg|png|jpe?g|gif)(\?\S*)?$/,
-				loader: 'url-loader?limit=100000@name=[name][ext]'
+				test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, 
+				loader: "url-loader?limit=10000&mimetype=application/font-woff" 
+			}, { 
+				test: /\.(png|jpe?g|gif|svg)(\?\S*)?$/,
+				loader: 'url-loader?limit=10000@name=[name][ext]'
+			}, {
+				test: /\.(ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/, 
+				loader: "file-loader" 
 			}
 		]
 	},
+
 	plugins : [
 		//new BundleAnalyzerPlugin(),
 		new HtmlWebpackPlugin({
